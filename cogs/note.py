@@ -30,5 +30,5 @@ class NoteCog(commands.Cog):
         self.notes[ctx.author.id] = []
         await ctx.send("All your notes have been cleared.")
 
-def setup(bot):
-    bot.add_cog(NoteCog(bot))
+async def setup(bot):
+    await bot.add_cog(NoteCog(bot))

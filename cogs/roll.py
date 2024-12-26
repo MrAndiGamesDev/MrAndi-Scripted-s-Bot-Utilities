@@ -15,5 +15,5 @@ class Roll(commands.Cog):
         result = random.randint(1, sides)
         await ctx.send(f"{ctx.author.mention} rolled a {result} on a {sides}-sided dice!")
 
-def setup(bot):
-    bot.add_cog(Roll(bot))
+async def setup(bot):
+    await bot.add_cog(Roll(bot))

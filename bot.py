@@ -17,16 +17,16 @@ intents.message_content = True  # Enable message content intent specifically
 bot = commands.Bot(command_prefix=config["Prefix"], intents=intents)
 
 token = os.getenv("TOKEN")
+gif_path = config["gif_path"]
 
 async def send_status_message(status: str, color: discord.Color):
-    """Send bot status message to status channel"""
     channel = bot.get_channel(config['StatusChannelID'])
     if channel:
         embed = discord.Embed(
             title="Bot Status Update",
             description=status,
             color=color,
-            timestamp=datetime.datetime.utcnow()
+            timestamp=datetime.datetime.now()
         )
         await channel.send(embed=embed)
 
@@ -45,8 +45,13 @@ async def on_ready():
         status=discord.Status.online
     )
 
+    async def gifpfp():
+        with open(gif_path, 'rb') as gif_file:
+            gif_data = gif_file.read()
+            await bot.user.edit(avatar=gif_data)
+            print("Bot profile picture updated to a GIF")
+
     async def load_extensions_from_directory(directory: str, extension_type: str) -> None:
-        """Load all Python files as extensions from the specified directory."""
         try:
             for filename in os.listdir(f'./{directory}'):
                 if filename.endswith('.py'):
@@ -58,6 +63,8 @@ async def on_ready():
             await send_status_message(f"Error loading {extension_type}s: {e} ⚠️", discord.Color.orange())
 
     await load_extensions_from_directory('cogs', 'cog')
+    await gifpfp()
+    
 
 @bot.event
 async def on_disconnect():

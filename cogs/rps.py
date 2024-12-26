@@ -1,4 +1,3 @@
-import discord
 from discord.ext import commands
 import random
 
@@ -27,5 +26,5 @@ class RPS(commands.Cog):
 
         await ctx.send(f"You chose {choice}, I chose {bot_choice}. {result}")
 
-def setup(bot):
-    bot.add_cog(RPS(bot))
+async def setup(bot):
+    await bot.add_cog(RPS(bot))
