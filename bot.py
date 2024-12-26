@@ -1,9 +1,9 @@
 import discord
 from discord.ext import commands
 import os
-from dotenv import load_dotenv
 import json
 import datetime
+from dotenv import load_dotenv
 
 load_dotenv()
 
@@ -14,7 +14,9 @@ with open('config.json') as f:
 # Bot setup with intents
 intents = discord.Intents.default()  # Using default intents is safer
 intents.message_content = True  # Enable message content intent specifically
-bot = commands.Bot(command_prefix='!', intents=intents, activity=discord.Game(name="!help | Bot is ready!"))
+bot = commands.Bot(command_prefix=config["Prefix"], intents=intents)
+
+token = os.getenv("TOKEN")
 
 async def send_status_message(status: str, color: discord.Color):
     """Send bot status message to status channel"""
@@ -61,8 +63,21 @@ async def on_ready():
 async def on_disconnect():
     await send_status_message("Bot has disconnected! 🔴", discord.Color.red())
 
+@bot.event
+async def on_command_error(ctx, error):
+    if isinstance(error, commands.CommandNotFound):
+        await ctx.send("❌ Command not found! Use !help to see available commands.")
+    elif isinstance(error, commands.MissingPermissions):
+        await ctx.send("❌ You don't have permission to use this command!")
+    elif isinstance(error, commands.MissingRequiredArgument):
+        await ctx.send("❌ Missing required argument! Please check command usage with !help.")
+    elif isinstance(error, commands.BadArgument):
+        await ctx.send("❌ Invalid argument provided! Please check command usage with !help.")
+    else:
+        await ctx.send(f"❌ An error occurred: {str(error)}")
+        print(f"Unhandled error: {error}")
+
 # Run the bot
-token = os.getenv("TOKEN")
 if not token:
     raise ValueError("No token found in .env file")
     
