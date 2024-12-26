@@ -1,0 +1,1 @@
+pip install discord.py requests asyncio datetime python-dotenv os random time json sys asyncio, requests
