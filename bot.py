@@ -65,7 +65,6 @@ async def on_ready():
     await load_extensions_from_directory('cogs', 'cog')
     await gifpfp()
     
-
 @bot.event
 async def on_disconnect():
     await send_status_message("Bot has disconnected! 🔴", discord.Color.red())

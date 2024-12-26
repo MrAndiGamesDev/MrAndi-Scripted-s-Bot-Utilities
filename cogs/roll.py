@@ -8,7 +8,6 @@ class Roll(commands.Cog):
 
     @commands.command()
     async def roll(self, ctx, sides: int):
-        """Rolls a dice with a specified number of sides."""
         if sides < 1:
             await ctx.send("Please provide a number greater than 0.")
             return
