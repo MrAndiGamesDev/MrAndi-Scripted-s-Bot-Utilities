@@ -1,3 +1,4 @@
+import discord
 from discord.ext import commands
 
 class Shutdown(commands.Cog):
@@ -7,7 +8,12 @@ class Shutdown(commands.Cog):
     @commands.command()
     @commands.is_owner()  # Only allow bot owner to use this command
     async def shutdown(self, ctx):
-        await ctx.send("Shutting down...")
+        ShutdownEmbed = discord.Embed(
+            title="Shuting",
+            description="The Bot Down",
+            color=discord.Color.blue()
+        )
+        await ctx.send(embed=ShutdownEmbed)
         await self.bot.close()
 
 async def setup(bot):
