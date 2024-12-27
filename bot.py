@@ -15,7 +15,11 @@ with open('config.json') as f:
 intents = discord.Intents.default()  # Using default intents is safer
 intents.message_content = True  # Enable message content intent specifically
 intents.typing = True
+
 bot = commands.Bot(command_prefix=config["Prefix"], intents=intents)
+
+# # Remove the default help command
+# bot.remove_command("help")
 
 token = os.getenv("TOKEN")
 
