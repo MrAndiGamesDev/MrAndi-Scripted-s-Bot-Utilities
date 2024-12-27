@@ -1,1 +1,1 @@
-pip install discord.py requests asyncio datetime python-dotenv os random time json sys asyncio requests google-api-python-client
+pip install discord.py requests asyncio datetime python-dotenv os random time json sys google-api-python-client
