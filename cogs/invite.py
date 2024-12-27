@@ -9,13 +9,17 @@ class Invite(commands.Cog):
     async def invite(self, ctx):
         """Generates and sends an invite link to the server."""
         try:
-            # Check if the bot has the required permissions to create an invite
+            # Check if the bot has permission to create invites
+            if not ctx.guild.me.guild_permissions.create_instant_invite:
+                return await ctx.send("I don't have permission to create an invite link. Please check my permissions.")
+
+            # Check if the user has permission to generate an invite
             if not ctx.author.guild_permissions.manage_guild:
                 return await ctx.send("You do not have permission to generate an invite link.")
 
             # Create a server invite with no expiration and unlimited uses
-            invite = await ctx.guild.invites.create(
-                ctx.channel, max_age=0, max_uses=0  # Never expire, infinite uses
+            invite = await ctx.channel.create_invite(
+                max_age=0, max_uses=0  # Never expire, infinite uses
             )
             await ctx.send(f"Here is your invite link to join the server: {invite.url}")
 
