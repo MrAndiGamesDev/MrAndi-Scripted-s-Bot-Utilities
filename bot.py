@@ -14,10 +14,10 @@ with open('config.json') as f:
 # Bot setup with intents
 intents = discord.Intents.default()  # Using default intents is safer
 intents.message_content = True  # Enable message content intent specifically
+intents.typing = True
 bot = commands.Bot(command_prefix=config["Prefix"], intents=intents)
 
 token = os.getenv("TOKEN")
-gif_path = config["gif_path"]
 
 async def send_status_message(status: str, color: discord.Color):
     channel = bot.get_channel(config['StatusChannelID'])
@@ -45,11 +45,25 @@ async def on_ready():
         status=discord.Status.online
     )
 
-    async def gifpfp():
-        with open(gif_path, 'rb') as gif_file:
-            gif_data = gif_file.read()
+    async def animated_pfp(bot, gif_path):
+        """Updates the bot's profile picture to an animated GIF."""
+        try:
+            # Check if the provided GIF path exists
+            if not os.path.exists(gif_path):
+                print(f"Error: The GIF file at {gif_path} was not found.")
+                return
+
+            # Open and read the GIF file
+            with open(gif_path, 'rb') as gif_file:
+                gif_data = gif_file.read()
+
+            # Update the bot's profile picture
             await bot.user.edit(avatar=gif_data)
-            print("Bot profile picture updated to a GIF")
+            print("Bot profile picture updated to a GIF.")
+
+        except Exception as e:
+            # Catch and log any exceptions that occur
+            print(f"An error occurred while updating the bot's profile picture: {e}")
 
     async def load_extensions_from_directory(directory: str, extension_type: str) -> None:
         try:
@@ -62,9 +76,9 @@ async def on_ready():
             print(f'Error loading {extension_type}s: {e}')
             await send_status_message(f"Error loading {extension_type}s: {e} ⚠️", discord.Color.orange())
 
+    await animated_pfp(bot, "./tenor.gif")
     await load_extensions_from_directory('cogs', 'cog')
-    await gifpfp()
-    
+
 @bot.event
 async def on_disconnect():
     await send_status_message("Bot has disconnected! 🔴", discord.Color.red())
